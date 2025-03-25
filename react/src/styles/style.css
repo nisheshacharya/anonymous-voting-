@@ -1,5 +1,3 @@
-
-
 .positions-container,
 .candidate-container {
   padding: 20px;
@@ -33,8 +31,8 @@
 }
 
 .form-container,
-.candidate-form-container{
-    margin-top: 10px;
+.candidate-form-container {
+  margin-top: 10px;
 }
 
 .main-form input[type="text"],
@@ -86,4 +84,64 @@
 
 .cancel-button {
   background-color: #f44336;
+}
+
+/* Header container */
+.header {
+  background: linear-gradient(to right, #2563eb, #4f46e5);
+  color: white;
+  padding: 15px 0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100px;
+}
+
+/* Container for alignment */
+.container {
+  width: 90%;
+  max-width: 500px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo styling */
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+/* Navigation links */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-item {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.nav-item:hover {
+  color: #dbeafe;
+}
+
+/* Login button */
+.login-btn {
+  background-color: white;
+  color: #2563eb;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #f3f4f6;
 }
