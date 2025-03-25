@@ -1,17 +1,20 @@
 
-import Home from './components/Home'
+import AppRouter from './router/Router';
 import './App.css'
-import { RoleProvider } from './context/RoleContext'; // ✅ Import the correct provider
+import { RoleProvider } from './context/RoleContext';
+import { BrowserRouter } from 'react-router-dom';
 
 
 function App() {
 
 
   return (
-    <RoleProvider> 
-      <Home />
+
+    <RoleProvider>
+      <AppRouter />
     </RoleProvider>
-  
+
+
   )
 }
 

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CandidateContainer from "./CondidateContainer";
 import "../styles/style.css";
+import { useNavigate } from 'react-router-dom'; 
 
 const PositionsContainer = ({ userRole }) => {
+
   const [positions, setPositions] = useState([]);
   const [showPositionForm, setShowPositionForm] = useState(false);
   const [positionFormData, setPositionFormData] = useState({
@@ -17,6 +19,13 @@ const PositionsContainer = ({ userRole }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [confirmationPositionId, setConfirmationPositionId] = useState(null);
 
+  useEffect(() => {
+    if (showConfirmation) {
+      console.log("HERE IS CONFIRMATION should be rendered now!");
+    }
+  }, [showConfirmation]);
+
+  const navigate = useNavigate();
 
   const showAddPosition = () => {
     setShowPositionForm(true);
@@ -87,11 +96,19 @@ const PositionsContainer = ({ userRole }) => {
 
 
   const confirmSelections = () => {
+   
     console.log("Submitted Selections:", selections);
     setShowConfirmation(false);
     setConfirmationPositionId(null);
     // To do: send the selections to your backend
+    navigate('/thank-you'); // Navigate to the ThankYouPage
   };
+  // const confirmSelections = () => {
+  //   console.log("Submitted Selections:", selections);
+  //   setShowConfirmation(false);
+  //   setConfirmationPositionId(null);
+  //   // To do: send the selections to your backend
+  // };
 
   const cancelSelections = () => {
     setShowConfirmation(false);
@@ -126,7 +143,11 @@ const PositionsContainer = ({ userRole }) => {
             <p>You have {pos.maxSelection - (selections[pos.positionId] || []).length} selections left.</p>
           )}
         </div>
+
       ))}
+      <div>
+
+      </div>
 
       {userRole === "admin" && (
         <div>
@@ -150,29 +171,7 @@ const PositionsContainer = ({ userRole }) => {
               </form>
             </div>
           )}
-          {showConfirmation && (
-            <div className="confirmation-modal">
-              <div className="confirmation-content">
-                {console.log("showConfirmation before render:", showConfirmation)}
-                <h3>Confirm Selections</h3>
-                {console.log("Confirmation Position ID in modal:", confirmationPositionId)}
-                <ul>
-                  {selections[confirmationPositionId] &&
-                    selections[confirmationPositionId].map((candidateId) => (
-                      <li key={candidateId}>
-                        Candidate ID: {candidateId}
-                      </li>
-                    ))}
-                </ul>
-                <button className="confirm-button" onClick={confirmSelections}>
-                  Confirm
-                </button>
-                <button className="cancel-button" onClick={cancelSelections}>
-                  Make Changes
-                </button>
-              </div>
-            </div>
-          )}
+
         </div>
       )}
 
@@ -180,6 +179,31 @@ const PositionsContainer = ({ userRole }) => {
         <button className="submit-button" onClick={handleSubmitSelections}>
           Submit Selection
         </button>
+      )}
+
+      {showConfirmation && (
+
+        <div className="confirmation-modal">
+          <div className="confirmation-content">
+            {console.log("showConfirmation before render:", showConfirmation)}
+            <h3>Confirm Selections</h3>
+            {console.log("Confirmation Position ID in modal:", confirmationPositionId)}
+            <ul>
+              {selections[confirmationPositionId] &&
+                selections[confirmationPositionId].map((candidateId) => (
+                  <li key={candidateId}>
+                    Candidate ID: {candidateId}
+                  </li>
+                ))}
+            </ul>
+            <button className="confirm-button" onClick={confirmSelections}>
+              Confirm
+            </button>
+            <button className="cancel-button" onClick={cancelSelections}>
+              Make Changes
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
