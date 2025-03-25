@@ -1,6 +1,7 @@
 
 import PositionsContainer from "./PositionsContainer";
 import { useRole } from "../context/RoleContext";
+import { CandidateProvider } from "../context/CandidateContext";
 
 const Home = () => {
   const { userRole, toggleRole } = useRole();
@@ -11,7 +12,9 @@ const Home = () => {
       <button onClick={toggleRole}>
         Switch to {userRole === 'voter' ? 'Admin' : 'Voter'} View
       </button>
-      <PositionsContainer userRole={userRole} />
+      <CandidateProvider>
+        <PositionsContainer userRole={userRole} />
+      </CandidateProvider>
     </div>
   );
 };

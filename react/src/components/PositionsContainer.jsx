@@ -31,18 +31,18 @@ const PositionsContainer = ({ userRole }) => {
   const handleSubmitPosition = (e) => {
     e.preventDefault();
     if (editPositionId) {
-      setPositions(positions.map(pos => {
+      setPositions(positions.map((pos) => {
         if (pos.positionId === editPositionId) {
           return {
             ...positionFormData,
-            maxSelection: parseInt(positionFormData.maxSelection)
+            maxSelection: parseInt(positionFormData.maxSelection),
           };
         }
         return pos;
       }));
     } else {
       setPositions([...positions, positionFormData]);
-      setSelections({ ...selections, [positionFormData.positionId]: [] }) //add position to selections
+      setSelections({ ...selections, [positionFormData.positionId]: [] }); //add position to selections
       setAddPositionVisible(false);
     }
     setPositionFormData({ position: "", name: "", positionId: "", maxSelection: "" });
@@ -51,7 +51,7 @@ const PositionsContainer = ({ userRole }) => {
   };
 
   const handleEditPosition = (positionId) => {
-    const positionToEdit = positions.find(pos => pos.positionId === positionId);
+    const positionToEdit = positions.find((pos) => pos.positionId === positionId);
     if (positionToEdit) {
       setPositionFormData(positionToEdit);
       setShowPositionForm(true);
@@ -64,23 +64,26 @@ const PositionsContainer = ({ userRole }) => {
   };
 
   const handleSelectionChange = (positionId, candidateId, isSelected) => {
-    setSelections(prevSelections => {
+    setSelections((prevSelections) => {
       const positionSelections = prevSelections[positionId] || [];
       if (isSelected) {
         return { ...prevSelections, [positionId]: [...positionSelections, candidateId] };
       } else {
-        return { ...prevSelections, [positionId]: positionSelections.filter(id => id !== candidateId) };
+        return { ...prevSelections, [positionId]: positionSelections.filter((id) => id !== candidateId) };
       }
     });
   };
 
-  const handleSubmitSelections = (positionId) => {
-    console.log("handleSubmitSelections called with positionId:", positionId);
-    setShowConfirmation(true);
-    setConfirmationPositionId(positionId);
-    console.log("confirmationPositionId:", positionId);
+  const handleSubmitSelections = () => {
+    console.log(" handleSubmitSelections called!!!!");
+    const firstPositionId = Object.keys(selections)[0];
+    console.log(" firstPositionId: ", firstPositionId);
+    if (firstPositionId) {
+      setShowConfirmation(true);
+      setConfirmationPositionId(firstPositionId);
+      console.log("showConfirmation:", true, "confirmationPositionId:", firstPositionId);
+    }
   };
-
 
 
   const confirmSelections = () => {
@@ -106,8 +109,10 @@ const PositionsContainer = ({ userRole }) => {
           <strong> Candidate:</strong> {pos.name},
           <strong> ID:</strong> {pos.positionId},
           <strong> Max Selection:</strong> {pos.maxSelection}
-          {userRole === 'admin' && (
-            <button className="edit-button" onClick={() => handleEditPosition(pos.positionId)}>Edit Position</button>
+          {userRole === "admin" && (
+            <button className="edit-button" onClick={() => handleEditPosition(pos.positionId)}>
+              Edit Position
+            </button>
           )}
           <CandidateContainer
             positionId={pos.positionId}
@@ -117,18 +122,13 @@ const PositionsContainer = ({ userRole }) => {
             onSelectionChange={handleSelectionChange}
             selectedCandidates={selections[pos.positionId] || []}
           />
-          {userRole === 'voter' && (
-            <button
-              className="submit-button"
-              onClick={() => handleSubmitSelections(pos.positionId)}
-            >
-              Submit Selection
-            </button>
+          {userRole === "voter" && (
+            <p>You have {pos.maxSelection - (selections[pos.positionId] || []).length} selections left.</p>
           )}
         </div>
       ))}
 
-      {userRole === 'admin' && (
+      {userRole === "admin" && (
         <div>
           <button className="add-button" onClick={showAddPosition}>
             Add Position
@@ -153,12 +153,13 @@ const PositionsContainer = ({ userRole }) => {
           {showConfirmation && (
             <div className="confirmation-modal">
               <div className="confirmation-content">
+                {console.log("showConfirmation before render:", showConfirmation)}
                 <h3>Confirm Selections</h3>
+                {console.log("Confirmation Position ID in modal:", confirmationPositionId)}
                 <ul>
                   {selections[confirmationPositionId] &&
                     selections[confirmationPositionId].map((candidateId) => (
                       <li key={candidateId}>
-                        {/* Display candidate name here if needed */}
                         Candidate ID: {candidateId}
                       </li>
                     ))}
@@ -166,50 +167,22 @@ const PositionsContainer = ({ userRole }) => {
                 <button className="confirm-button" onClick={confirmSelections}>
                   Confirm
                 </button>
-                <button className="cancel-button" onClick={cancelSelections}>Make Changes</button>
+                <button className="cancel-button" onClick={cancelSelections}>
+                  Make Changes
+                </button>
               </div>
             </div>
           )}
         </div>
       )}
 
-
-      {userRole === 'voter' && (
-        <button className="submit-button" onClick={() => {
-          console.log("Submit button clicked. showConfirmation:", showConfirmation);
-          handleSubmitSelections(pos.positionId);
-        }}>
+      {userRole === "voter" && (
+        <button className="submit-button" onClick={handleSubmitSelections}>
           Submit Selection
         </button>
-      )}
-
-      {console.log("Rendering confirmation modal. showConfirmation:", showConfirmation)}
-
-      {showConfirmation && (
-        <div className="confirmation-modal">
-          <div className="confirmation-content">
-            <h3>Confirm Selections</h3>
-            <ul>
-              {selections[confirmationPositionId].map((candidateId) => (
-                <li key={candidateId}>
-                  {/* Display candidate name here if needed */}
-                  Candidate ID: {candidateId}
-                </li>
-              ))}
-            </ul>
-            <button className="confirm-button" onClick={confirmSelections}>
-              Confirm
-            </button>
-            <button className="cancel-button" onClick={cancelSelections}>Make Changes</button>
-          </div>
-        </div>
       )}
     </div>
   );
 };
 
 export default PositionsContainer;
-
-
-
-
