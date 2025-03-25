@@ -1,8 +1,9 @@
-// CandidateContainer.jsx
 import React, { useState } from "react";
 import "../styles/style.css";
 
-const CandidateContainer = ({ positionId, onCandidateAdded, userRole }) => {
+
+
+const CandidateContainer = ({ positionId, onCandidateAdded, userRole, maxSelection, onSelectionChange, selectedCandidates }) => {
   const [candidates, setCandidates] = useState([]);
   const [showCandidateForm, setShowCandidateForm] = useState(false);
   const [candidateFormData, setCandidateFormData] = useState({
@@ -49,6 +50,15 @@ const CandidateContainer = ({ positionId, onCandidateAdded, userRole }) => {
     }
   };
 
+  const handleSelect = (candidateId) => {
+    const isSelected = selectedCandidates.includes(candidateId);
+    if (!isSelected && selectedCandidates.length >= maxSelection) {
+      alert(`You can only select up to ${maxSelection} candidates.`);
+      return;
+    }
+    onSelectionChange(positionId, candidateId, !isSelected);
+  };
+
   return (
     <div className="candidate-container">
       <h3 className="candidate-header">Candidates for Position ID: {positionId}</h3>
@@ -60,8 +70,15 @@ const CandidateContainer = ({ positionId, onCandidateAdded, userRole }) => {
           {candidate.photo && (
             <img src={URL.createObjectURL(candidate.photo)} alt="Candidate" className="candidate-photo" />
           )}
+          {userRole === 'voter' && (
+            <button className={`select-button ${selectedCandidates.includes(candidate.candidateId) ? 'unselect' : ''}`} onClick={() => handleSelect(candidate.candidateId)}>
+              {selectedCandidates.includes(candidate.candidateId) ? 'Unselect' : 'Select'}
+            </button>
+          )}
           {userRole === 'admin' && (
-            <button className="edit-button" onClick={() => handleEditCandidate(candidate.candidateId)}>Edit Candidate</button>
+            <button className="edit-button" onClick={() => handleEditCandidate(candidate.candidateId)}>
+              Edit Candidate
+            </button>
           )}
         </div>
       ))}

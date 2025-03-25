@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import CandidateContainer from "./CondidateContainer";
 import "../styles/style.css";
@@ -13,6 +12,7 @@ const PositionsContainer = ({ userRole }) => {
     maxSelection: "",
   });
   const [editPositionId, setEditPositionId] = useState(null);
+  const [selections, setSelections] = useState({});
 
   const showAddPosition = () => {
     setShowPositionForm(true);
@@ -35,10 +35,10 @@ const PositionsContainer = ({ userRole }) => {
           };
         }
         return pos;
-        }
-      ));
+      }));
     } else {
       setPositions([...positions, positionFormData]);
+      setSelections({...selections, [positionFormData.positionId]:[]}) //add position to selections
     }
     setPositionFormData({ position: "", name: "", positionId: "", maxSelection: "" });
     setShowPositionForm(false);
@@ -58,20 +58,46 @@ const PositionsContainer = ({ userRole }) => {
     console.log("Candidate added:", candidateData);
   };
 
+  const handleSelectionChange = (positionId, candidateId, isSelected) => {
+    setSelections(prevSelections => {
+      const positionSelections = prevSelections[positionId] || [];
+      if (isSelected) {
+        return { ...prevSelections, [positionId]: [...positionSelections, candidateId] };
+      } else {
+        return { ...prevSelections, [positionId]: positionSelections.filter(id => id !== candidateId) };
+      }
+    });
+  };
+
+  const handleSubmitSelections = () => {
+    console.log("Submitted Selections:", selections);
+    // Will later send to the backend.
+  };
+
   return (
     <div className="positions-container">
       <h2 className="main-header">Different Positions and candidates</h2>
 
       {positions.map((pos, index) => (
         <div key={index} className="position-item">
-          <strong> Position:</strong> {pos.position}, 
-          <strong> Candidate:</strong> {pos.name}, 
-          <strong> ID:</strong> {pos.positionId}, 
-          <strong> Max Selection:</strong> {pos.maxSelection} 
+          <strong> Position:</strong> {pos.position},
+          <strong> Candidate:</strong> {pos.name},
+          <strong> ID:</strong> {pos.positionId},
+          <strong> Max Selection:</strong> {pos.maxSelection}
           {userRole === 'admin' && (
             <button className="edit-button" onClick={() => handleEditPosition(pos.positionId)}>Edit Position</button>
           )}
-          <CandidateContainer positionId={pos.positionId} onCandidateAdded={handleCandidateAdded} userRole={userRole} />
+          <CandidateContainer
+            positionId={pos.positionId}
+            onCandidateAdded={handleCandidateAdded}
+            userRole={userRole}
+            maxSelection={pos.maxSelection}
+            onSelectionChange={handleSelectionChange}
+            selectedCandidates={selections[pos.positionId] || []}
+          />
+          {userRole === 'voter' && (
+            <p>You have {pos.maxSelection - (selections[pos.positionId] || []).length} selections left.</p>
+          )}
         </div>
       ))}
 
@@ -98,6 +124,10 @@ const PositionsContainer = ({ userRole }) => {
             </div>
           )}
         </>
+      )}
+
+      {userRole === 'voter' && (
+        <button className="submit-button" onClick={handleSubmitSelections}>Submit Selection</button>
       )}
     </div>
   );
