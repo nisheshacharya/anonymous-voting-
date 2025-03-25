@@ -1,7 +1,10 @@
+
 import { useState } from "react";
+import CandidateContainer from "./CondicateContainer";
+import "../styles/style.css";
 
 const PositionsContainer = () => {
-    const [positions, setPositions] = useState([]); // Initialize as an empty array
+    const [positions, setPositions] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({
         position: "",
@@ -19,26 +22,34 @@ const PositionsContainer = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setPositions([...positions, formData]); // Add new position to array
-        setFormData({ position: "", name: "", positionId: "" });
+        setPositions([...positions, formData]);
+        setFormData({ position: "", description: "", positionId: "" });
         setShowForm(false);
     };
 
+    const handleCandidateAdded = (candidateData) => {
+        // Handle added candidate data in parent component if needed
+        console.log("Candidate added:", candidateData);
+    };
+
     return (
-        <div>
-            <h2>Different Positions and candidates</h2>
+        <div className="positions-container">
+            <h2 className="main-header">Different Positions and candidates</h2>
 
             {positions.map((pos, index) => (
-                <div key={index} style={{ border: "1px solid #ccc", padding: "10px", margin: "10px 0" }}>
-                    <strong>Position:</strong> {pos.position}, <strong>Candidate:</strong> {pos.name}, <strong>ID:</strong> {pos.positionId}
+                <div key={index} className="position-item">
+                    <strong>Position:</strong> {pos.position}, <strong>Description:</strong> {pos.description}, <strong>ID:</strong> {pos.positionId}
+                    <CandidateContainer positionId={pos.positionId} onCandidateAdded={handleCandidateAdded} />
                 </div>
             ))}
 
-            <button onClick={showAddPosition}>Add Position</button>
+            <button className="add-button" onClick={showAddPosition}>
+                Add Position
+            </button>
 
             {showForm && (
-                <div className="position-form">
-                    <form onSubmit={handleSubmit}>
+                <div className="form-container">
+                    <form className="main-form" onSubmit={handleSubmit}>
                         <input
                             type="text"
                             name="position"
@@ -49,8 +60,8 @@ const PositionsContainer = () => {
                         <br />
                         <input
                             type="text"
-                            name="name"
-                            placeholder="Candidate Name"
+                            name="description"
+                            placeholder="Description"
                             required={true}
                             onChange={handleChange}
                         />
@@ -63,11 +74,12 @@ const PositionsContainer = () => {
                             onChange={handleChange}
                         />
                         <br />
-                        <button type="submit">Submit</button>
+                        <button type="submit" className="submit-button">
+                            Submit
+                        </button>
                     </form>
                 </div>
             )}
-
         </div>
     );
 };

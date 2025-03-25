@@ -1,0 +1,54 @@
+
+
+.positions-container,
+.candidate-container {
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+.main-header,
+.candidate-header {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+.position-item,
+.candidate-item {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 10px 0;
+}
+
+.add-button,
+.add-candidate-button,
+.submit-button,
+.submit-candidate-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.form-container,
+.candidate-form-container{
+    margin-top: 10px;
+}
+
+.main-form input[type="text"],
+.candidate-form input[type="text"],
+.candidate-form input[type="file"] {
+  margin: 5px 0;
+  padding: 8px;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.candidate-photo {
+  max-width: 100px;
+  max-height: 100px;
+  margin-top: 5px;
+}
