@@ -19,7 +19,7 @@ const CandidateContainer = ({ positionId, userRole, maxSelection, onSelectionCha
   }, [positionId, candidatesData, updateCandidates]);
 
   const showAddCandidate = () => {
-    setShowCandidateForm(true);
+    setShowCandidateForm(!showCandidateForm);
     setCandidateFormData({ name: "", photo: null, candidateId: "" });
     setEditCandidateId(null);
   };
@@ -36,8 +36,8 @@ const CandidateContainer = ({ positionId, userRole, maxSelection, onSelectionCha
     e.preventDefault();
     const updatedCandidates = editCandidateId
       ? candidatesData[positionId].map((cand) =>
-          cand.candidateId === editCandidateId ? { ...candidateFormData, positionId } : cand
-        )
+        cand.candidateId === editCandidateId ? { ...candidateFormData, positionId } : cand
+      )
       : [...(candidatesData[positionId] || []), { ...candidateFormData, positionId }];
 
     updateCandidates(positionId, updatedCandidates);
@@ -101,7 +101,7 @@ const CandidateContainer = ({ positionId, userRole, maxSelection, onSelectionCha
       {userRole === "admin" && (
         <>
           <button className="add-candidate-button" onClick={showAddCandidate}>
-            Add Candidate
+            {showCandidateForm ? "Cancel" : "Add Candidate"}
           </button>
 
           {showCandidateForm && (
