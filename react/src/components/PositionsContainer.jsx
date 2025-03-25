@@ -13,6 +13,7 @@ const PositionsContainer = ({ userRole }) => {
   });
   const [editPositionId, setEditPositionId] = useState(null);
   const [selections, setSelections] = useState({});
+  const [addPositionVisible, setAddPositionVisible] = useState(true);
 
   const showAddPosition = () => {
     setShowPositionForm(true);
@@ -39,6 +40,7 @@ const PositionsContainer = ({ userRole }) => {
     } else {
       setPositions([...positions, positionFormData]);
       setSelections({...selections, [positionFormData.positionId]:[]}) //add position to selections
+      setAddPositionVisible(false);
     }
     setPositionFormData({ position: "", name: "", positionId: "", maxSelection: "" });
     setShowPositionForm(false);
