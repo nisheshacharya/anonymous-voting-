@@ -2,14 +2,17 @@
 
 import Home from './components/Home'
 import './App.css'
+import { RoleProvider } from './context/RoleContext'; // ✅ Import the correct provider
+
 
 function App() {
 
 
   return (
-    
-    <Home/>
-    
+    <RoleProvider> 
+      <Home />
+    </RoleProvider>
+  
   )
 }
 
