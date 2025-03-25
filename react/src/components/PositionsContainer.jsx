@@ -10,12 +10,13 @@ const PositionsContainer = ({ userRole }) => {
     position: "",
     name: "",
     positionId: "",
+    maxSelection: "",
   });
   const [editPositionId, setEditPositionId] = useState(null);
 
   const showAddPosition = () => {
     setShowPositionForm(true);
-    setPositionFormData({ position: "", name: "", positionId: "" });
+    setPositionFormData({ position: "", name: "", positionId: "", maxSelection: "" });
     setEditPositionId(null);
   };
 
@@ -26,13 +27,20 @@ const PositionsContainer = ({ userRole }) => {
   const handleSubmitPosition = (e) => {
     e.preventDefault();
     if (editPositionId) {
-      setPositions(positions.map(pos =>
-        pos.positionId === editPositionId ? positionFormData : pos
+      setPositions(positions.map(pos => {
+        if (pos.positionId === editPositionId) {
+          return {
+            ...positionFormData,
+            maxSelection: parseInt(positionFormData.maxSelection)
+          };
+        }
+        return pos;
+        }
       ));
     } else {
       setPositions([...positions, positionFormData]);
     }
-    setPositionFormData({ position: "", name: "", positionId: "" });
+    setPositionFormData({ position: "", name: "", positionId: "", maxSelection: "" });
     setShowPositionForm(false);
     setEditPositionId(null);
   };
@@ -56,7 +64,10 @@ const PositionsContainer = ({ userRole }) => {
 
       {positions.map((pos, index) => (
         <div key={index} className="position-item">
-          <strong>Position:</strong> {pos.position}, <strong>Candidate:</strong> {pos.name}, <strong>ID:</strong> {pos.positionId}
+          <strong> Position:</strong> {pos.position}, 
+          <strong> Candidate:</strong> {pos.name}, 
+          <strong> ID:</strong> {pos.positionId}, 
+          <strong> Max Selection:</strong> {pos.maxSelection} 
           {userRole === 'admin' && (
             <button className="edit-button" onClick={() => handleEditPosition(pos.positionId)}>Edit Position</button>
           )}
@@ -79,6 +90,7 @@ const PositionsContainer = ({ userRole }) => {
                 <br />
                 <input type="text" name="positionId" placeholder="Position Id" required={true} value={positionFormData.positionId} onChange={handleChangePosition} />
                 <br />
+                <input type="number" name="maxSelection" placeholder="How many candidates can be voted?" value={positionFormData.maxSelection} onChange={handleChangePosition} />
                 <button type="submit" className="submit-button">
                   {editPositionId ? "Update Position" : "Submit Position"}
                 </button>
