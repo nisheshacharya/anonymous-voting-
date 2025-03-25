@@ -28,7 +28,7 @@ const PositionsContainer = ({ userRole }) => {
   const navigate = useNavigate();
 
   const showAddPosition = () => {
-    setShowPositionForm(true);
+    setShowPositionForm(!showPositionForm);
     setPositionFormData({ position: "", name: "", positionId: "", maxSelection: "" });
     setEditPositionId(null);
   };
@@ -152,7 +152,7 @@ const PositionsContainer = ({ userRole }) => {
       {userRole === "admin" && (
         <div>
           <button className="add-button" onClick={showAddPosition}>
-            Add Position
+            {showPositionForm ? "Cancel" : "Add Position"}
           </button>
 
           {showPositionForm && (
