@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CandidateContainer from "./CondidateContainer";
 import "../styles/style.css";
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 const PositionsContainer = ({ userRole }) => {
 
@@ -96,7 +96,7 @@ const PositionsContainer = ({ userRole }) => {
 
 
   const confirmSelections = () => {
-   
+
     console.log("Submitted Selections:", selections);
     setShowConfirmation(false);
     setConfirmationPositionId(null);
@@ -175,10 +175,16 @@ const PositionsContainer = ({ userRole }) => {
         </div>
       )}
 
-      {userRole === "voter" && (
+      {userRole === "voter" && positions.length > 0 && (
         <button className="submit-button" onClick={handleSubmitSelections}>
           Submit Selection
         </button>
+      )}
+
+      {positions.length === 0 && (
+        <div>
+          <h3>No candidates available to vote right now</h3>
+        </div>
       )}
 
       {showConfirmation && (
